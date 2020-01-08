@@ -440,7 +440,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 	<script>
 		axios({
-			url: 'http://localhost:3000/api/product?page=1',
+			url: 'http://admin-page-express.herokuapp.com/api/product?page=1',
 			method: 'get',
 
 		})
@@ -518,7 +518,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			}); */
 			let id = objButton.value;
 			axios({
-				url: 'http://localhost:3000/api/product/category?key=' + id,
+				url: 'http://admin-page-express.herokuapp.com/api/product/category?key=' + id,
 				method: 'get',
 
 			})
@@ -596,7 +596,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			let page = objPage.value;
 			console.log(page);
 			axios({
-				url: 'http://localhost:3000/api/product?page=' + page,
+				url: 'http://admin-page-express.herokuapp.com/api/product?page=' + page,
 				method: 'get',
 
 			})
@@ -683,7 +683,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 			console.log("id product cart: " + idProductCart);
-			axios.get('http://localhost:3000/api/product/single/' + idProductCart)
+			axios.get('http://admin-page-express.herokuapp.com/api/product/single/' + idProductCart)
 				.then(function (response) {
 					// handle success
 					console.log(response.data.product);
@@ -780,22 +780,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</script>
 
 	<script>
+		function removeItem(id) {
+			var index = -1;
+			var obj = JSON.parse(localStorage.getItem("listProductCart") || "[]"); //fetch cart from storage
+			var items = obj.products || []; //get the products
+			for (var i = 0; i < items.length; i++) { //loop over the collection
+				console.log('id one by one product: ' + items[i]._id);
+				if (items[i]._id === id) { //see if ids match
+					items.splice(i, 1); //remove item from array
+					break; //exit loop
+				}
+			}
+			localStorage.setItem("listProductCart", JSON.stringify(obj)); //set item back into storage
+		}
 		var listProductCart = JSON.parse(localStorage.getItem("listProductCart") || "[]");
+
+
 		closeFunction = (objBtn) => {
 			let idProductClose = objBtn.value;
-			console.log(idProductClose);
+			console.log('id close: ' + idProductClose);
+
+			//removeItem(idProductClose);
+			 var item = [];
+
 			let startIndex = 0;
-
-			var item = [];
-
-
 			listProductCart.forEach((element) => {
 				if (element._id !== idProductClose) {
 					item.push(element);
-					localStorage.setItem('listProductCart', JSON.stringify(item));
 				}
-
-			})
+				startIndex++;
+			}) 
+			localStorage.setItem('listProductCart', JSON.stringify(item));
 		}
 	</script>
 

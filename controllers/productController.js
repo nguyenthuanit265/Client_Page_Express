@@ -167,26 +167,11 @@ exports.product_list = function (req, res, next) {
 exports.product_detail = function (req, res, next) {
 
   var id = req.params.id;
-
-  async.parallel({
-    product: function (callback) {
-      Product.findById(id)
-        .exec(callback);
-    }
-  }, function (err, results) {
-    if (err) { return next(err); }
-    if (results.product == null) { // No results.
-      var err = new Error('Product not found');
-      err.status = 404;
-      return next(err);
-    }
-    // Successful, so render.
-    res.render('single', { title: 'product Detail', product: results.product });
-
-
-  }
-
-
-  );
+  Product.findById({ _id: id }).exec(function (err, product) {
+    if (err) throw err;
+    res.render('single', { title: 'product Detail', product: product });
+  })
+  // Successful, so render.
+  //res.render('single', { title: 'product Detail', product: results.product });
 
 };
